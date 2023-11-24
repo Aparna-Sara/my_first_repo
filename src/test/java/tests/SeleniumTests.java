@@ -6,14 +6,24 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
+import utils.ExtentReportsManager;
 
 public class SeleniumTests {
 	
 	private WebDriver driver;
+	private static ExtentReports extent;
+    private static ExtentTest test;
 	
 	@BeforeClass
 	public void setUp() {
+		
+		extent = ExtentReportsManager.createInstance();
+        test = ExtentReportsManager.createTest(getClass().getSimpleName());
+
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 	}
@@ -22,6 +32,7 @@ public class SeleniumTests {
 	public void tearDown() {
 		if(driver != null) {
 		driver.quit();}
+		extent.flush(); 
 	}
 
 	
@@ -31,6 +42,7 @@ public class SeleniumTests {
 		String title = driver.getTitle();
 		
 		System.out.println("Title ---> "+title);
+		test.pass("Test getTitle passed"); // Add a pass log to the extent report
 		
 	}
 }
